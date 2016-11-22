@@ -9,15 +9,15 @@ function main() {
             alert("No puedes dejar campos vacios");
         } else {
 
-          setTimeout(function() {
-                  $(".carga").fadeOut(1000);
-              },1200);
+            setTimeout(function() {
+                $(".carga").fadeOut(1000);
+            }, 1200);
 
             $.post('/fetch', {
 
                 twitter_handle: twitter_handle
             }, function(data) {
-
+                $(".contenidotweet").empty();
                 $(".contenidotweet").append(data);
             });
             modal.style.display = "none";
@@ -27,21 +27,18 @@ function main() {
     });
 
 
-    $(".enviar").click(function(e) {
-        e.preventDefault();
-        $('#carga').fadeIn(5);
+    $(".enviar").click(function(c) {
+        c.preventDefault();
         var text = $("#myModal2").find("textarea").val();
         if (text == '') {
             alert("No puedes dejar campos vacios");
         } else {
-          setTimeout(function() {
-                  $(".carga").fadeOut(1000);
-              },800);
             $.post('/twitter', {
                 text: text
-            },function(data){
-               $(".contenidotweet").append(data);
-               console.log(data);
+            }, function(data) {
+                // $(".contenidotweet").empty();
+                $(".contenidotweet").append(data);
+                //  console.log(data);
             });
             modal2.style.display = "none";
         }
