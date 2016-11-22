@@ -1,0 +1,6 @@
+<h1 style="color:white;font-size:30px;">Estos son los tweets de <%= @user%></h1>
+<% @tweets.each do  |t| %>
+<li>
+  <label><%= t.tweet %></label><br>
+</li>
+<% end %>
