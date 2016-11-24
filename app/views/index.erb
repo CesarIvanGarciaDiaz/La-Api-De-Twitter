@@ -11,18 +11,23 @@
             </div>
 
         </header>
+        <form action="/sign_in" method="get">
+            <input type="submit" value="Sign in with Twitter">
+        </form><br>
+
         <div id="carga"><img class="carga" src="/carga.gif"/></div>
         <nav id="buscame">
             <ul id="yo">
                 <a href="#" class="bt-menucross">
                     <span class="icono-crossCircle"></span>
                 </a>
+
                 <li>
-                    <a id="myBtn" href="#">Usuario</a>
+                    <a id="myBtn" href="#">Buscar un Usuario</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a id="myBtn2" href="#">Agregar Tweet</a>
-                </li>
+                </li> -->
             </ul>
             <br clear="all">
         </nav>
@@ -31,8 +36,6 @@
             <div class="contenidotweet">
                 <%if @tweets%>
 
-
-                
                 <%end%>
             </div>
 
@@ -56,22 +59,5 @@
             </div>
         </div>
 
-        <div id="myModal2" class="modal2">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="close2">×</span>
-                    <h2>Escribe un Tweet</h2>
-                </div>
-                <div class="modal-body">
-                    <form class="new_comment">
-                        <textarea id="enviar_tweet" name="tweet" placeholder='Escribe un Tweet' name='cmt' value=''></textarea>
-                        <input class="enviar" type="submit" value="Enviar" name='submit_cmt'></input>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <h3>:3</h3>
-                </div>
-            </div>
-        </div>
     </div>
 </body>

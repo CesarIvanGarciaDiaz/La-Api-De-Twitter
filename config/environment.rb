@@ -17,6 +17,7 @@ require "sinatra/reloader" if development?
 require 'erb'
 #agregamos un require de la api twitter
 require 'twitter'
+require 'oauth'
 
 APP_ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
@@ -30,11 +31,21 @@ Dir[APP_ROOT.join('app', 'uploaders', '*.rb')].each { |file| require file }
 # Configura la base de datos y modelos
 require APP_ROOT.join('config', 'database')
 
+env_config = YAML.load_file(APP_ROOT.join('config', 'twitter.yaml'))
+
+env_config.each do |key, value|
+  ENV[key] = value
+end
+
+CLIENT= Twitter::REST::Client.new do |config|
+  config.consumer_key = ENV['TWITTER_KEY']
+  config.consumer_secret = ENV['TWITTER_SECRET']
+end
 
 #configuracion de twitter
-CLIENT = Twitter::REST::Client.new do |config|
- config.consumer_key        = "L1kwLZMcn6WFhjbYNlRiA1Ijq"
- config.consumer_secret     = "rJtV5vmqbXWRmADT9o3uwgCOuQO5jWkK6MPX860xVWIBgbkHgb"
- config.access_token        = "346822815-YCg62fPY4EX6VUPbOs2M9QxfV7MiG7ycz44HvUS2"
- config.access_token_secret = "DdYBlgrEqjHMsFuLZQYZqoiB9YR4drzEskfOTIOM6YAIq"
-end
+# CLIENT = Twitter::REST::Client.new do |config|
+#  config.consumer_key        = "L1kwLZMcn6WFhjbYNlRiA1Ijq"
+#  config.consumer_secret     = "rJtV5vmqbXWRmADT9o3uwgCOuQO5jWkK6MPX860xVWIBgbkHgb"
+#  config.access_token        = "346822815-YCg62fPY4EX6VUPbOs2M9QxfV7MiG7ycz44HvUS2"
+#  config.access_token_secret = "DdYBlgrEqjHMsFuLZQYZqoiB9YR4drzEskfOTIOM6YAIq"
+# end

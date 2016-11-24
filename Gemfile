@@ -16,7 +16,9 @@ gem 'activerecord'
 gem 'rake'
 # agregamos la gema de twitter
 gem 'twitter'
+gem 'oauth'
 gem 'shotgun'
+
 
 group :test do
   gem 'faker'

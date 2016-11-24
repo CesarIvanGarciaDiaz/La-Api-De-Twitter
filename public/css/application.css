@@ -6,7 +6,13 @@
     z-index: -100;
     /*#5f6061*/
 }
-
+h1{
+  padding-top: 0;
+  color:white;
+  font-size: 40px;
+  font-family: cursive;
+  font-weight: bold;
+}
 .iconcodea {
     color: white;
     font-family: cursive;
@@ -93,6 +99,10 @@ a .icono-crossCircle {
     font-weight: bold;
 }
 
+.twitter_user{
+  padding-left: 100px;
+  padding-right: 200px;
+}
 .contenidotweet {
     /*padding: 10px 30px 0px 0px;*/
     padding: 0px 0px 0px 0px;
