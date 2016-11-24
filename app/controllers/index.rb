@@ -4,14 +4,6 @@ get '/' do
   erb :index
 end
 
-post '/twitter' do
-  CLIENT.update(params[:text])
-  @tweet=(params[:text])
-  erb :tweet
-end
-
-
-
 get '/sign_in' do
   # El método `request_token` es uno de los helpers
   # Esto lleva al usuario a una página de twitter donde sera atentificado con sus credenciales
@@ -42,6 +34,11 @@ end
 
 # Para el signout no olvides borrar el hash de session
 
+post '/twitter' do
+  CLIENT.update(params[:text])
+  @tweet=(params[:text])
+  erb :tweet
+end
 
 get '/fetch' do
   username=  session[:username]
@@ -62,7 +59,7 @@ get '/:username' do
     end
   end
 
-  if Time.now - @tweets_temporal.last.created_at > 10
+  if Time.now - @tweets_temporal.last.created_at > 100
     tweets_twitter=CLIENT.user_timeline(@user,result_type:"recent").take(5)
     tweets_twitter.each do  |t|
       Tweet.create(id_tweet: @user_created.id, tweet: t.text)

@@ -37,8 +37,9 @@ function main() {
                 text: text
             }, function(data) {
                 // $(".contenidotweet").empty();
-                $(".contenidotweet").append(data);
+                // $(".contenidotweet").append(data);
                 //  console.log(data);
+                alert(data)
             });
             modal2.style.display = "none";
         }
