@@ -23,7 +23,12 @@ get '/auth' do
   username = @access_token.params['screen_name']
   session[:oauth_token] = @access_token.params['oauth_token']
   session[:oauth_token_secret] = @access_token.params['oauth_token_secret']
+  # user_update=TwitterUser.find_by(username:username)
+  # if user_update.oauth_token != blank?
+  #   TwitterUser.update(oauth_token: session[:oauth_token], oauth_token_secret: session[:oauth_token_secret])
+  # else
   TwitterUser.create(username: username, oauth_token: session[:oauth_token], oauth_token_secret: session[:oauth_token_secret])
+  # end
   session[:username] = username
 
   # Aquí es donde deberás crear la cuenta del usuario y guardar usando el 'access_token' lo siguiente:
@@ -34,8 +39,17 @@ end
 
 # Para el signout no olvides borrar el hash de session
 
-post '/twitter' do
-  CLIENT.update(params[:text])
+post '/tweet' do
+
+  cliente_user = Twitter::REST::Client.new do |config|
+    config.consumer_key        = ENV['TWITTER_KEY']
+    config.consumer_secret     = ENV["TWITTER_SECRET"]
+    config.access_token        = session[:oauth_token]
+    config.access_token_secret = session[:oauth_token_secret]
+  end
+
+  tweet=params[:text]
+  cliente_user.update(tweet)
   @tweet=(params[:text])
   erb :tweet
 end
@@ -45,26 +59,48 @@ get '/fetch' do
   redirect to("/#{username}")
 end
 
+post '/buscar' do
+  username = params[:twitter_handle]
+  redirect to("/#{username}")
+end
+
 get '/:username' do
 
-  @user="@#{params[:username]}"
+  @user=params[:username]
 
-  @user_created = TwitterUser.find_or_create_by(username: @user)
+  imagen = Twitter::REST::Client.new do |config|
+    config.consumer_key        = ENV['TWITTER_KEY']
+    config.consumer_secret     = ENV["TWITTER_SECRET"]
+    config.access_token        = session[:oauth_token]
+    config.access_token_secret = session[:oauth_token_secret]
+  end
+  user_data = imagen.user_search(@user).first
+  @url = user_data.profile_image_url("original")
+
+  @user_created=TwitterUser.find_or_create_by(username: @user)
   @tweets_temporal = Tweet.where(id_tweet: @user_created.id)
 
   if @tweets_temporal.empty?
-    tweets_twitter=CLIENT.user_timeline(@user,result_type:"recent").take(10)
+    tweets_twitter=CLIENT.user_timeline("@#{@user}",result_type:"recent").take(10)
     tweets_twitter.each do |t|
       Tweet.create(id_tweet: @user_created.id, tweet: t.text)
     end
   end
 
-  if Time.now - @tweets_temporal.last.created_at > 100
+  if Time.now - @tweets_temporal.last.created_at > 10
     tweets_twitter=CLIENT.user_timeline(@user,result_type:"recent").take(5)
-    tweets_twitter.each do  |t|
+    tweets_twitter.reverse_each do  |t|
       Tweet.create(id_tweet: @user_created.id, tweet: t.text)
     end
   end
+
   @tweets = Tweet.where(id_tweet: @user_created.id)
   erb :tweets
+end
+
+post '/exit' do
+  session.delete(:oauth_token)
+  session.delete(:oauth_token_secret)
+  session.delete(:username)
+  erb :index
 end

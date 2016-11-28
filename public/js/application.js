@@ -13,12 +13,15 @@ function main() {
                 $(".carga").fadeOut(1000);
             }, 1200);
 
-            $.post('/fetch', {
+            $.post('/buscar', {
 
                 twitter_handle: twitter_handle
             }, function(data) {
+                $(".profile").remove();
+                $(".icon_decoration").remove();
+                $(".User_oauth").empty();
                 $(".contenidotweet").empty();
-                $(".contenidotweet").append(data);
+                $(".contenidotweet").prepend(data);
             });
             modal.style.display = "none";
 
@@ -33,14 +36,16 @@ function main() {
         if (text == '') {
             alert("No puedes dejar campos vacios");
         } else {
-            $.post('/twitter', {
+            $.post('/tweet', {
                 text: text
             }, function(data) {
+              $(".icon_decoration").remove();
                 // $(".contenidotweet").empty();
-                // $(".contenidotweet").append(data);
+                $(".contenidotweet").prepend(data);
                 //  console.log(data);
-                alert(data)
+
             });
+
             modal2.style.display = "none";
         }
     });
